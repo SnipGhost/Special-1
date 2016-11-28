@@ -30,6 +30,7 @@ namespace Special_1
             Console.WriteLine("4. Сформировать и вывести новый массив");
             Console.WriteLine("5. Вывести массив");
             Console.WriteLine("6. Вернуться в основное меню");
+            Console.Write("Введите 1/2/3/4/5/6: ");
             int a = int.Parse(Console.ReadLine());
             Console.Clear();
             return a;

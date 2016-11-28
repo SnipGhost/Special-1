@@ -22,6 +22,19 @@ namespace Special_1
             return a;
         }
 
+        public static int SubMenu1()
+        {
+            Console.WriteLine("1. Найти максимум и минимум");
+            Console.WriteLine("2. Отсортировать по возрастанию");
+            Console.WriteLine("3. Отсортировать по убыванию");
+            Console.WriteLine("4. Сформировать и вывести новый массив");
+            Console.WriteLine("5. Вывести массив");
+            Console.WriteLine("6. Вернуться в основное меню");
+            int a = int.Parse(Console.ReadLine());
+            Console.Clear();
+            return a;
+        }
+
         public static string[] InputNumberLine() // Ввод строки и деление ее на подстроки-числа
         {
             string input = Console.ReadLine();
@@ -70,7 +83,7 @@ namespace Special_1
             }
         }
 
-        public static int FindM(int[] arr, bool type)
+        public static int FindM(int[] arr, bool type) // Поиск индекса максимального/минимального элемента
         {
             int size = arr.Length, m = 0;
             for (int i = 1; i < size; ++i)
@@ -83,7 +96,7 @@ namespace Special_1
             return m;
         }
 
-        public static int[] GenerateEvenArr(int[] arr)
+        public static int[] GenerateEvenArr(int[] arr) // Сгенерировать массив четных элементов
         {
             int size = arr.Length, count = 0;
             for (int i = 0; i < size; ++i)
@@ -103,16 +116,26 @@ namespace Special_1
             return res;
         }
 
-        static void Main(string[] args)
+        public static void WaitAnyKey()
         {
-            while (true)
+            Console.WriteLine("Для продолжения нажмите любую клавишу ...");
+            Console.ReadKey(); // Ожидание нажатия любой клавиши
+            Console.Clear();
+        }
+
+        public static void TestArr1()
+        {
+            Console.Write("1. Работа с одномерным массивом.\nВведите числа (через пробелы): ");
+            int[] arr = CreateArr(InputNumberLine());
+            DisplayValues(arr);
+            WaitAnyKey();
+            bool ret = false;
+            int mode = 0;
+            while (!ret)
             {
-                switch (Menu())
+                switch (SubMenu1())
                 {
                     case 1:
-                        Console.Write("1. Работа с одномерным массивом.\nВведите числа (через пробелы): ");
-                        int[] arr = CreateArr(InputNumberLine());
-                        DisplayValues(arr);
                         //-------------------------------------
                         // Поиск максимума/минимума (2 способа)
                         //-------------------------------------
@@ -120,19 +143,51 @@ namespace Special_1
                         // Возвращает индекс максимального/минимального
                         Console.WriteLine("MAX: " + arr[max] + " индекс: " + max);
                         Console.WriteLine("MIN: " + arr[min] + " индекс: " + min);
-                        Console.WriteLine("MAX: " + arr.Max());
-                        Console.WriteLine("MIN: " + arr.Min());
+                        Console.WriteLine("arr.Max(): " + arr.Max());
+                        Console.WriteLine("arr.Min(): " + arr.Min());
                         //-------------------------------------
-                        // Сортировка (2 способа по 2 типа)
+                        break;
+
+                    case 2:
                         //-------------------------------------
-                        MySort(arr, true); 
-                        // true - по убыванию, false - по возрастанию
+                        // Сортировка (по возрастанию)
+                        //-------------------------------------
+                        Console.Write("Введите режим сортировки (1/0): ");
+                        mode = int.Parse(Console.ReadLine());
+                        if (mode == 1)
+                        {
+                            MySort(arr, false);
+                            // true - по убыванию, false - по возрастанию
+                        }
+                        else
+                        {
+                            Array.Sort(arr);
+                        }
                         DisplayValues(arr);
-                        Array.Sort(arr);
-                        //Array.Reverse(arr);
-                        // Отразит массив (если он отсротирован - даст сортировку в другую сторону)
-                        //arr.Reverse(); // Или так, тоже можно
+                        //-------------------------------------
+                        break;
+
+                    case 3:
+                        //-------------------------------------
+                        // Сортировка (по убыванию)
+                        //-------------------------------------
+                        Console.Write("Введите режим сортировки (1/0): ");
+                        mode = int.Parse(Console.ReadLine());
+                        if (mode == 1)
+                        {
+                            MySort(arr, true);
+                            // true - по убыванию, false - по возрастанию
+                        }
+                        else
+                        {
+                            Array.Sort(arr);
+                            Array.Reverse(arr);
+                        }
                         DisplayValues(arr);
+                        //-------------------------------------
+                        break;
+
+                    case 4:
                         //-------------------------------------
                         // Формирование нового массива (четн)
                         //-------------------------------------
@@ -141,14 +196,40 @@ namespace Special_1
                         //-------------------------------------
                         break;
 
+                    case 5:
+                        DisplayValues(arr);
+                        break;
+
+                    case 6:
+                        ret = true;
+                        break;
+
+                    default:
+                        Console.WriteLine("Нет такой операции! Повторите ввод.");
+                        break;
+                }
+                WaitAnyKey();
+            }
+        }
+
+        static void Main(string[] args)
+        {
+            while (true)
+            {
+                switch (Menu())
+                {
+                    case 1:
+                        TestArr1();
+                        break;
+
                     case 2:
                         Console.WriteLine("2. Работа с двумерным массивом.");
-
+                        WaitAnyKey();
                         break;
 
                     case 3:
                         Console.WriteLine("3. Работа со ступенчатым массивом.");
-
+                        WaitAnyKey();
                         break;
 
                     case 4:
@@ -157,9 +238,9 @@ namespace Special_1
 
                     default:
                         Console.WriteLine("Нет такой операции! Повторите ввод.");
+                        WaitAnyKey();
                         break;
                 }
-                Console.ReadKey();
             }
         }
 

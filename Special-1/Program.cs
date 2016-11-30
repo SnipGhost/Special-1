@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace Special_1
 {
@@ -17,7 +17,8 @@ namespace Special_1
             Console.WriteLine("3. Ступенчатый массив");
             Console.WriteLine("4. Завершить программу");
             Console.Write("Введите 1/2/3/4: ");
-            int a = int.Parse(Console.ReadLine());
+            int a;
+            int.TryParse(Console.ReadLine(), out a);
             Console.Clear();
             return a;
         }
@@ -31,19 +32,79 @@ namespace Special_1
             Console.WriteLine("5. Вывести массив");
             Console.WriteLine("6. Вернуться в основное меню");
             Console.Write("Введите 1/2/3/4/5/6: ");
-            int a = int.Parse(Console.ReadLine());
+            int a;
+            int.TryParse(Console.ReadLine(), out a);
             Console.Clear();
             return a;
         }
 
-        public static string[] InputNumberLine() // Ввод строки и деление ее на подстроки-числа
+        public static int SubMenu2()
         {
-            string input = Console.ReadLine();
-            string[] strarr = input.Split(new Char[] { ' ' });
-            return strarr;
+            Console.WriteLine("1. Найти максимум и минимум");
+            Console.WriteLine("2. Провести операции над массивами");
+            Console.WriteLine("3. Вывести массив");
+            Console.WriteLine("4. Вернуться в основное меню");
+            Console.Write("Введите 1/2/3/4: ");
+            int a;
+            int.TryParse(Console.ReadLine(), out a);
+            Console.Clear();
+            return a;
         }
 
-        public static void DisplayValues(int[] arr) // Вывод одномерного массива
+        public static int SubMenu3()
+        {
+            Console.WriteLine("1. Найти максимум и минимум");
+            Console.WriteLine("2. Вывести массив");
+            Console.WriteLine("3. Вернуться в основное меню");
+            Console.Write("Введите 1/2/3: ");
+            int a;
+            int.TryParse(Console.ReadLine(), out a);
+            Console.Clear();
+            return a;
+        }
+
+        public static string[][] InputNumberLine(bool isFile, string path) // Ввод строки и деление ее на подстроки-числа
+        {
+            string input = "";
+            if (!isFile)
+            {
+                string s = Console.ReadLine();
+                input += s;
+                while (s.Length > 1)
+                {
+                    s = Console.ReadLine();
+                    input += '\n' + s;
+                }
+            }
+            else
+            {
+                if (path.Length == 0) path = "in.txt";
+                try
+                {
+                    TextReader tr = new StreamReader(path);
+                    input = tr.ReadToEnd();
+                    tr.Close();
+                }
+                catch (FileNotFoundException)
+                {
+                    Console.WriteLine("Не удалось открыть файл \"" + path + "\"");
+                    WaitAnyKey();
+                    return null;
+                    //Environment.Exit(0); // Если супер-критично
+                }
+            }
+            string[] strarr = input.Split(new Char[] { '\n' });
+            string[][] sa = new string[strarr.Length][];
+            for (int i = 0; i < strarr.Length; i++)
+            {
+                sa[i] = strarr[i].Split(new Char[] { ' ' });
+            }
+            //DisplayValues(sa); // Для отладки
+            return sa;
+        }
+
+        // Шаблон функции FuncName<Type>() - принимает на вход массив любого типа (шаблон) и вида (перегружена трижды)
+        public static void DisplayValues<Type>(Type[] arr) // Вывод одномерного массива
         {
             Console.WriteLine();
             for (int i = arr.GetLowerBound(0); i <= arr.GetUpperBound(0); i++)
@@ -53,15 +114,82 @@ namespace Special_1
             Console.WriteLine();
         }
 
-        public static int[] CreateArr(string[] strarr) // Генерирует массив из введенных кусочков строки
+        public static void DisplayValues<Type>(Type[,] arr) // Вывод двумерного массива
         {
-            int size = strarr.Length;
-            int[] arr = new int[size];
+            Console.WriteLine();
+            for (int i = arr.GetLowerBound(0); i <= arr.GetUpperBound(0); i++)
+            {
+                for (int j = arr.GetLowerBound(1); j <= arr.GetUpperBound(1); j++)
+                {
+                    Console.WriteLine(" [{0}, {1}]: {2}", i, j, arr[i, j]);
+                }
+            }
+            Console.WriteLine();
+        }
+
+        public static void DisplayValues<Type>(Type[][] arr) // Вывод ступенчатого массива
+        {
+            Console.WriteLine();
+            for (int i = arr.GetLowerBound(0); i <= arr.GetUpperBound(0); i++)
+            {
+                for (int j = arr[i].GetLowerBound(0); j <= arr[i].GetUpperBound(0); j++)
+                {
+                    Console.WriteLine(" [{0}][{1}]: {2}", i, j, arr[i][j]);
+                }
+            }
+            Console.WriteLine();
+        }
+
+        public static int[] CreateArr1(string[][] strarr) // Генерирует одномерный массив из введенных кусочков строки
+        {
+            int size = strarr[0].Length; // В данном случае мы лишь генерируем массив из первой (нулевой) строки
+            int[] arr = new int[size];   // Так что нет смысла задействовать никакие строки, кроме первой (нулевой)
             for (int i = 0; i < size; ++i)
             {
-                if (strarr[i].Length > 0) // Исключает ошибки при лишних пробелах
+                if (strarr[0][i].Length > 0) // Исключает ошибки при лишних пробелах
                 {
-                    arr[i] = int.Parse(strarr[i]);
+                    int.TryParse(strarr[0][i], out arr[i]);
+                }
+            }
+            return arr;
+        }
+
+        public static int[,] CreateArr2(string[][] strarr) // Генерирует двумерный массив из введенных кусочков строки
+        {
+            int m = strarr.Length-1, n = strarr[0].Length;
+            int[,] arr = new int[m, n];
+            for (int i = 0; i < m; ++i)
+            {
+                for (int j = 0; j < n; ++j)
+                {
+                    if (j >= strarr[i].Length)
+                    {
+                        Console.WriteLine("Некорректный ввод!");
+                        WaitAnyKey();
+                        return null;
+                    }
+                    if (strarr[i][j].Length > 0) // Исключает ошибки при лишних пробелах
+                    {
+                        int.TryParse(strarr[i][j], out arr[i, j]);
+                    }
+                }
+            }
+            return arr;
+        }
+
+        public static int[][] CreateArr3(string[][] strarr) // Генерирует ступечнатый массив из введенных кусочков строки
+        {
+            int[][] arr = null;
+            arr = new int[strarr.Length-1][];
+            for (int i = 0; i < strarr.Length-1; i++)
+            {
+                arr[i] = new int[strarr[i].Length];
+                for (int j = 0; j < strarr[i].Length; j++)
+                {
+                   if (strarr[i][j].Length > 0) // Исключает ошибки при лишних пробелах
+                   {
+                       int.TryParse(strarr[i][j], out arr[i][j]);
+                   }
                 }
             }
             return arr;
@@ -97,6 +225,40 @@ namespace Special_1
             return m;
         }
 
+        public static int[] FindM(int[,] arr, bool type) // Поиск индекса максимального/минимального элемента
+        {
+            int m = 0, n = 0;
+            for (int i = 0; i < arr.GetLength(0); ++i)
+            {
+                for (int j = 0; j < arr.GetLength(1); ++j)
+                {
+                    if ((type) ? arr[m, n] < arr[i, j] : arr[m, n] > arr[i, j])
+                    {
+                        m = i;
+                        n = j;
+                    }
+                }
+            }
+            return (new int[2] {m, n});
+        }
+
+        public static int[] FindM(int[][] arr, bool type) // Поиск индекса максимального/минимального элемента
+        {
+            int m = 0, n = 0;
+            for (int i = 0; i < arr.Length; ++i)
+            {
+                for (int j = 0; j < arr[i].Length; ++j)
+                {
+                    if ((type) ? arr[m][n] < arr[i][j] : arr[m][n] > arr[i][j])
+                    {
+                        m = i;
+                        n = j;
+                    }
+                }
+            }
+            return (new int[2] { m, n });
+        }
+
         public static int[] GenerateEvenArr(int[] arr) // Сгенерировать массив четных элементов
         {
             int size = arr.Length, count = 0;
@@ -121,17 +283,41 @@ namespace Special_1
         {
             Console.WriteLine("Для продолжения нажмите любую клавишу ...");
             Console.ReadKey(); // Ожидание нажатия любой клавиши
-            Console.Clear();
+            Console.Clear();   // Очистка консоли
         }
 
         public static void TestArr1()
         {
-            Console.Write("1. Работа с одномерным массивом.\nВведите числа (через пробелы): ");
-            int[] arr = CreateArr(InputNumberLine());
-            DisplayValues(arr);
-            WaitAnyKey();
-            bool ret = false;
-            int mode = 0;
+            Console.WriteLine("1. Работа с одномерным массивом.");
+            Console.Write("Ввод из файла (1) или с клавиатуры (0)? ");
+            int mode;         // Вспомогательная переменная режима
+            bool ret = true;  // Получена команда завершения подменю
+            int[] arr = null; // Массив с которым мы работаем
+            string path = ""; // Путь до файла, если необходим
+            if (!int.TryParse(Console.ReadLine(), out mode))
+            {
+                Console.WriteLine("Некорректный ввод!");
+                WaitAnyKey();
+                return;
+            }
+            bool isFile = Convert.ToBoolean(mode);
+            if (!isFile)
+            {
+                Console.Write("\nВведите числа (через пробелы): ");
+            }
+            else
+            {
+                Console.Write("Введите имя входного файла: ");
+                path = Console.ReadLine();
+            }
+            string[][] inp = InputNumberLine(isFile, path); // Читаем строку (из файла или консоли)
+            if (inp != null) // Возможно только если файл был прочитан
+            {
+                arr = CreateArr1(inp); // Создаем (генерируем) массив из строки
+                DisplayValues(arr);   // Выводим массив
+                WaitAnyKey();
+                ret = false;          // Разрешаем продолжить исполнение цикла
+            }
             while (!ret)
             {
                 switch (SubMenu1())
@@ -154,7 +340,7 @@ namespace Special_1
                         // Сортировка (по возрастанию)
                         //-------------------------------------
                         Console.Write("Введите режим сортировки (1/0): ");
-                        mode = int.Parse(Console.ReadLine());
+                        int.TryParse(Console.ReadLine(), out mode);
                         if (mode == 1)
                         {
                             MySort(arr, false);
@@ -173,7 +359,7 @@ namespace Special_1
                         // Сортировка (по убыванию)
                         //-------------------------------------
                         Console.Write("Введите режим сортировки (1/0): ");
-                        mode = int.Parse(Console.ReadLine());
+                        int.TryParse(Console.ReadLine(), out mode);
                         if (mode == 1)
                         {
                             MySort(arr, true);
@@ -192,6 +378,7 @@ namespace Special_1
                         //-------------------------------------
                         // Формирование нового массива (четн)
                         //-------------------------------------
+                        Console.WriteLine("Массив, сформированный только из четных элементов исходного:");
                         int[] eve = GenerateEvenArr(arr);
                         DisplayValues(eve);
                         //-------------------------------------
@@ -202,7 +389,197 @@ namespace Special_1
                         break;
 
                     case 6:
-                        ret = true;
+                        ret = true; // Подать сигнал к завершению цикла
+                        break;
+
+                    default:
+                        Console.WriteLine("Нет такой операции! Повторите ввод.");
+                        break;
+                }
+                WaitAnyKey();
+            }
+        }        
+
+        public static void TestArr2()
+        {
+            Console.WriteLine("2. Работа с двумерным массивом.");
+            Console.Write("Ввод из файла (1) или с клавиатуры (0)? ");
+            int mode;         // Вспомогательная переменная режима
+            bool ret = true;  // Получена команда завершения подменю
+            string path = ""; // Путь до файла, если необходим
+            if (!int.TryParse(Console.ReadLine(), out mode))
+            {
+                Console.WriteLine("Некорректный ввод!");
+                WaitAnyKey();
+                return;
+            }
+            bool isFile = Convert.ToBoolean(mode);
+            int[,] arr = null; // Массив с которым мы работаем
+            if (!isFile)
+            {
+                Console.WriteLine("\nВведите числа (через пробелы) строками (через '\\n'): ");
+            }
+            else
+            {
+                Console.Write("Введите имя входного файла: ");
+                path = Console.ReadLine();
+            }
+            string[][] inp = InputNumberLine(isFile, path); // Читаем строку (из файла или консоли)
+            if (inp != null) // Возможно только если файл был прочитан
+            {
+                arr = CreateArr2(inp); // Создаем (генерируем) массив из строки
+                if (arr != null)
+                {
+                    DisplayValues(arr);   // Выводим массив
+                    WaitAnyKey();
+                    ret = false;          // Разрешаем продолжить исполнение цикла
+                }
+            }
+            while (!ret)
+            {
+                switch (SubMenu2())
+                {
+                    case 1:
+                        //-------------------------------------
+                        // Поиск максимума/минимума
+                        //-------------------------------------
+                        int[] max = FindM(arr, true);
+                        int[] min = FindM(arr, false);
+                        // Возвращает индекс максимального/минимального
+                        Console.WriteLine("MAX: " + arr[max[0], max[1]] + " индекс: [" + max[0] + ", " + max[1] + "]");
+                        Console.WriteLine("MIN: " + arr[min[0], min[1]] + " индекс: [" + min[0] + ", " + min[1] + "]");
+                        //-------------------------------------
+                        break;
+
+                    case 2:
+                        //-------------------------------------
+                        // Операции над массивами (матрицами)
+                        //-------------------------------------
+                        int[,] dop = null; // Второй временный массив с которым мы работаем
+                        if (!isFile)
+                        {
+                            Console.WriteLine("\nВведите числа (через пробелы) строками (через '\\n'): ");
+                        }
+                        else
+                        {
+                            Console.Write("Введите имя входного файла: ");
+                            path = Console.ReadLine();
+                        }
+                        inp = InputNumberLine(isFile, path); // Читаем строку (из файла или консоли)
+                        if (inp != null) // Возможно только если файл был прочитан
+                        {
+                            dop = CreateArr2(inp); // Создаем (генерируем) массив из строки
+                            if (dop != null && dop.GetLength(0) == arr.GetLength(0) && dop.GetLength(1) == arr.GetLength(1))
+                            {
+                                DisplayValues(dop);   // Выводим массив
+                                int[,] res = new int[arr.GetLength(0), arr.GetLength(1)];
+                                Console.WriteLine("\t(+)");
+                                for (int i = 0; i < arr.GetLength(0); i++)
+                                {
+                                    for (int j = 0; j < arr.GetLength(1); j++)
+                                    {
+                                        res[i, j] = arr[i, j] + dop[i, j];
+                                    }
+                                }
+                                DisplayValues(res);
+                                Console.WriteLine("\t(-)");
+                                for (int i = 0; i < arr.GetLength(0); i++)
+                                {
+                                    for (int j = 0; j < arr.GetLength(1); j++)
+                                    {
+                                        res[i, j] = arr[i, j] - dop[i, j];
+                                    }
+                                }
+                                DisplayValues(res);
+                                Console.WriteLine("\t(*)");
+                                for (int i = 0; i < arr.GetLength(0); i++)
+                                {
+                                    for (int j = 0; j < arr.GetLength(1); j++)
+                                    {
+                                        res[i, j] = arr[i, j] * dop[i, j];
+                                    }
+                                }
+                                DisplayValues(res);
+                                break;
+                            }
+                        }
+                        Console.WriteLine("Что-то пошло не так!");
+                        //-------------------------------------
+                        break;
+
+                    case 3:
+                        DisplayValues(arr);
+                        break;
+
+                    case 4:
+                        ret = true; // Подать сигнал к завершению цикла
+                        break;
+
+                    default:
+                        Console.WriteLine("Нет такой операции! Повторите ввод.");
+                        break;
+                }
+                WaitAnyKey();
+            }
+        }
+
+        public static void TestArr3()
+        {
+            Console.WriteLine("3. Работа со ступенчатым массивом.");
+            Console.Write("Ввод из файла (1) или с клавиатуры (0)? ");
+            int mode;         // Вспомогательная переменная режима
+            bool ret = true;  // Получена команда завершения подменю
+            string path = ""; // Путь до файла, если необходим
+            if (!int.TryParse(Console.ReadLine(), out mode))
+            {
+                Console.WriteLine("Некорректный ввод!");
+                WaitAnyKey();
+                return;
+            }
+            bool isFile = Convert.ToBoolean(mode);
+            int[][] arr = null; // Массив с которым мы работаем
+            if (!isFile)
+            {
+                Console.WriteLine("\nВведите числа (через пробелы) строками (через '\\n'): ");
+            }
+            else
+            {
+                Console.Write("Введите имя входного файла: ");
+                path = Console.ReadLine();
+            }
+            string[][] inp = InputNumberLine(isFile, path); // Читаем строку (из файла или консоли)
+            if (inp != null) // Возможно только если файл был прочитан
+            {
+                arr = CreateArr3(inp); // Создаем (генерируем) массив из строки
+                if (arr != null)
+                {
+                    DisplayValues(arr);   // Выводим массив
+                    WaitAnyKey();
+                    ret = false;          // Разрешаем продолжить исполнение цикла
+                }
+            }
+            while (!ret)
+            {
+                switch (SubMenu3())
+                {
+                    case 1:
+                        //-------------------------------------
+                        // Поиск максимума/минимума
+                        //-------------------------------------
+                        int[] max = FindM(arr, true);
+                        int[] min = FindM(arr, false);
+                        // Возвращает индекс максимального/минимального
+                        Console.WriteLine("MAX: " + arr[max[0]][max[1]] + " индекс: [" + max[0] + ", " + max[1] + "]");
+                        Console.WriteLine("MIN: " + arr[min[0]][min[1]] + " индекс: [" + min[0] + ", " + min[1] + "]");
+                        //-------------------------------------
+                        break;
+
+                    case 2:
+                        DisplayValues(arr);
+                        break;
+
+                    case 3:
+                        ret = true; // Подать сигнал к завершению цикла
                         break;
 
                     default:
@@ -220,21 +597,19 @@ namespace Special_1
                 switch (Menu())
                 {
                     case 1:
-                        TestArr1();
+                        TestArr1(); // Одномерный
                         break;
 
                     case 2:
-                        Console.WriteLine("2. Работа с двумерным массивом.");
-                        WaitAnyKey();
+                        TestArr2(); // Двумерный
                         break;
 
                     case 3:
-                        Console.WriteLine("3. Работа со ступенчатым массивом.");
-                        WaitAnyKey();
+                        TestArr3(); // Ступенчатый
                         break;
 
                     case 4:
-                        Environment.Exit(0);
+                        Environment.Exit(0); // Досвидули
                         break;
 
                     default:

@@ -9,7 +9,7 @@ namespace Special_1
     class Program
     {
 
-        public static int Menu()
+        static int Menu()
         {
             Console.Clear();
             Console.WriteLine("1. Одномерный массив");
@@ -23,7 +23,7 @@ namespace Special_1
             return a;
         }
 
-        public static int SubMenu1()
+        static int SubMenu1()
         {
             Console.WriteLine("1. Найти максимум и минимум");
             Console.WriteLine("2. Отсортировать по возрастанию");
@@ -38,7 +38,7 @@ namespace Special_1
             return a;
         }
 
-        public static int SubMenu2()
+        static int SubMenu2()
         {
             Console.WriteLine("1. Найти максимум и минимум");
             Console.WriteLine("2. Провести операции над массивами");
@@ -51,7 +51,7 @@ namespace Special_1
             return a;
         }
 
-        public static int SubMenu3()
+        static int SubMenu3()
         {
             Console.WriteLine("1. Найти максимум и минимум");
             Console.WriteLine("2. Вывести массив");
@@ -63,7 +63,7 @@ namespace Special_1
             return a;
         }
 
-        public static string[][] InputNumberLine(bool isFile, string path) // Ввод строки и деление ее на подстроки-числа
+        static string[][] InputNumberLine(bool isFile, string path) // Ввод строки и деление ее на подстроки-числа
         {
             string input = "";
             if (!isFile)
@@ -109,7 +109,7 @@ namespace Special_1
         }
 
         // Шаблон функции FuncName<Type>() - принимает на вход массив любого типа (шаблон) и вида (перегружена трижды)
-        public static void DisplayValues<Type>(Type[] arr) // Вывод одномерного массива
+        static void DisplayValues<Type>(Type[] arr) // Вывод одномерного массива
         {
             Console.WriteLine();
             for (int i = arr.GetLowerBound(0); i <= arr.GetUpperBound(0); i++)
@@ -119,7 +119,7 @@ namespace Special_1
             Console.WriteLine();
         }
 
-        public static void DisplayValues<Type>(Type[,] arr) // Вывод двумерного массива
+        static void DisplayValues<Type>(Type[,] arr) // Вывод двумерного массива
         {
             Console.WriteLine();
             for (int i = arr.GetLowerBound(0); i <= arr.GetUpperBound(0); i++)
@@ -132,7 +132,7 @@ namespace Special_1
             Console.WriteLine();
         }
 
-        public static void DisplayValues<Type>(Type[][] arr) // Вывод ступенчатого массива
+        static void DisplayValues<Type>(Type[][] arr) // Вывод ступенчатого массива
         {
             Console.WriteLine();
             for (int i = arr.GetLowerBound(0); i <= arr.GetUpperBound(0); i++)
@@ -145,7 +145,7 @@ namespace Special_1
             Console.WriteLine();
         }
 
-        public static int[] CreateArr1(string[][] strarr) // Генерирует одномерный массив из введенных кусочков строки
+        static int[] CreateArr1(string[][] strarr) // Генерирует одномерный массив из введенных кусочков строки
         {
             int size = strarr[0].Length; // В данном случае мы лишь генерируем массив из первой (нулевой) строки
             int[] arr = new int[size];   // Так что нет смысла задействовать никакие строки, кроме первой (нулевой)
@@ -159,7 +159,7 @@ namespace Special_1
             return arr;
         }
 
-        public static int[,] CreateArr2(string[][] strarr) // Генерирует двумерный массив из введенных кусочков строки
+        static int[,] CreateArr2(string[][] strarr) // Генерирует двумерный массив из введенных кусочков строки
         {
             int m = strarr.Length, n = strarr[0].Length;
             int[,] arr = new int[m, n];
@@ -182,7 +182,7 @@ namespace Special_1
             return arr;
         }
 
-        public static int[][] CreateArr3(string[][] strarr) // Генерирует ступечнатый массив из введенных кусочков строки
+        static int[][] CreateArr3(string[][] strarr) // Генерирует ступечнатый массив из введенных кусочков строки
         {
             int[][] arr = null;
             arr = new int[strarr.Length][];
@@ -200,7 +200,7 @@ namespace Special_1
             return arr;
         }
 
-        public static void MySort(int[] arr, bool type) // Сортировка массива вставками
+        static void MySort(int[] arr, bool type) // Сортировка массива вставками
         {
             int size = arr.Length;
             for (int i = 0; i < size; ++i)
@@ -217,7 +217,7 @@ namespace Special_1
             }
         }
 
-        public static int FindM(int[] arr, bool type) // Поиск индекса максимального/минимального элемента
+        static int FindM(int[] arr, bool type) // Поиск индекса максимального/минимального элемента
         {
             int size = arr.Length, m = 0;
             for (int i = 1; i < size; ++i)
@@ -230,7 +230,7 @@ namespace Special_1
             return m;
         }
 
-        public static int[] FindM(int[,] arr, bool type) // Поиск индекса максимального/минимального элемента
+        static int[] FindM(int[,] arr, bool type) // Поиск индекса максимального/минимального элемента
         {
             int m = 0, n = 0;
             for (int i = 0; i < arr.GetLength(0); ++i)
@@ -247,7 +247,7 @@ namespace Special_1
             return (new int[2] {m, n});
         }
 
-        public static int[] FindM(int[][] arr, bool type) // Поиск индекса максимального/минимального элемента
+        static int[] FindM(int[][] arr, bool type) // Поиск индекса максимального/минимального элемента
         {
             int m = 0, n = 0;
             for (int i = 0; i < arr.Length; ++i)
@@ -264,7 +264,7 @@ namespace Special_1
             return (new int[2] { m, n });
         }
 
-        public static int[] GenerateEvenArr(int[] arr) // Сгенерировать массив четных элементов
+        static int[] GenerateEvenArr(int[] arr) // Сгенерировать массив четных элементов
         {
             int size = arr.Length, count = 0;
             for (int i = 0; i < size; ++i)
@@ -284,14 +284,14 @@ namespace Special_1
             return res;
         }
 
-        public static void WaitAnyKey()
+        static void WaitAnyKey()
         {
             Console.WriteLine("Для продолжения нажмите любую клавишу ...");
             Console.ReadKey(); // Ожидание нажатия любой клавиши
             Console.Clear();   // Очистка консоли
         }
 
-        public static void TestArr1()
+        static void TestArr1()
         {
             Console.WriteLine("1. Работа с одномерным массивом.");
             Console.Write("Ввод из файла (1) или с клавиатуры (0)? ");
@@ -405,7 +405,7 @@ namespace Special_1
             }
         }        
 
-        public static void TestArr2()
+        static void TestArr2()
         {
             Console.WriteLine("2. Работа с двумерным массивом.");
             Console.Write("Ввод из файла (1) или с клавиатуры (0)? ");
@@ -528,7 +528,7 @@ namespace Special_1
             }
         }
 
-        public static void TestArr3()
+        static void TestArr3()
         {
             Console.WriteLine("3. Работа со ступенчатым массивом.");
             Console.Write("Ввод из файла (1) или с клавиатуры (0)? ");

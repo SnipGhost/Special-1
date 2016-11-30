@@ -69,12 +69,12 @@ namespace Special_1
             if (!isFile)
             {
                 string s = Console.ReadLine();
-                while (s.Length > 1)
+                while (s.Length > 0)
                 {
-                    input += s + '\n';
+                    input += s;
                     s = Console.ReadLine();
+                    input += '\n';
                 }
-                input.Remove(input.Length - 1);
             }
             else
             {
@@ -94,9 +94,14 @@ namespace Special_1
                 }
             }
             string[] strarr = input.Split(new Char[] { '\n' });
-            string[][] sa = new string[strarr.Length][];
-            for (int i = 0; i < strarr.Length; i++)
+            string[][] sa = new string[strarr.Length-1][];
+            for (int i = 0; i < strarr.Length-1; i++)
             {
+                //Console.WriteLine("#" + strarr[i] + "#"); // Для отладки
+                while (strarr[i][strarr[i].Length - 1] == ' ' || strarr[i][strarr[i].Length - 1] == 13)
+                {
+                    strarr[i] = strarr[i].Substring(0, strarr[i].Length - 1);
+                }
                 sa[i] = strarr[i].Split(new Char[] { ' ' });
             }
             //DisplayValues(sa); // Для отладки
@@ -156,7 +161,7 @@ namespace Special_1
 
         public static int[,] CreateArr2(string[][] strarr) // Генерирует двумерный массив из введенных кусочков строки
         {
-            int m = strarr.Length-1, n = strarr[0].Length;
+            int m = strarr.Length, n = strarr[0].Length;
             int[,] arr = new int[m, n];
             for (int i = 0; i < m; ++i)
             {
@@ -180,16 +185,16 @@ namespace Special_1
         public static int[][] CreateArr3(string[][] strarr) // Генерирует ступечнатый массив из введенных кусочков строки
         {
             int[][] arr = null;
-            arr = new int[strarr.Length-1][];
-            for (int i = 0; i < strarr.Length-1; i++)
+            arr = new int[strarr.Length][];
+            for (int i = 0; i < strarr.Length; i++)
             {
                 arr[i] = new int[strarr[i].Length];
                 for (int j = 0; j < strarr[i].Length; j++)
                 {
-                   if (strarr[i][j].Length > 0) // Исключает ошибки при лишних пробелах
-                   {
-                       int.TryParse(strarr[i][j], out arr[i][j]);
-                   }
+                    if (strarr[i][j].Length > 0) // Исключает ошибки при лишних пробелах
+                    {
+                        int.TryParse(strarr[i][j], out arr[i][j]);
+                    }
                 }
             }
             return arr;

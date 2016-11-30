@@ -3,7 +3,7 @@
 ## Ключевые файлы ##
 
 Последняя версия кода [/Special-1/Program.cs](https://github.com/SnipGhost/Special-1/blob/master/Special-1/Program.cs)  
-Тестовый блокнот [/in.txt](https://github.com/SnipGhost/Special-1/blob/master/in.txt)
+Тестовый блокнот [/Special-1/in.txt](https://github.com/SnipGhost/Special-1/blob/master/Special-1/in.txt)
 
 ## Список особенностей пользовательского интерфейса ##
 

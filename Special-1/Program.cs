@@ -69,12 +69,12 @@ namespace Special_1
             if (!isFile)
             {
                 string s = Console.ReadLine();
-                input += s;
                 while (s.Length > 1)
                 {
+                    input += s + '\n';
                     s = Console.ReadLine();
-                    input += '\n' + s;
                 }
+                input.Remove(input.Length - 1);
             }
             else
             {

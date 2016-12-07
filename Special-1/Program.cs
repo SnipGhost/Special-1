@@ -69,7 +69,7 @@ namespace Special_1
             if (!isFile)
             {
                 string s = Console.ReadLine();
-                while (s.Length > 0)
+                while (s != null && s.Length > 0)
                 {
                     input += s;
                     s = Console.ReadLine();

@@ -95,7 +95,19 @@ namespace Special_2
                 stu.Add(s);
                 str = tr.ReadLine();
             }
+            tr.Close();
             Console.WriteLine("Загрузка данных завершена успешно");
+        }
+
+        public void saveDataToFile(string path)
+        {
+            TextWriter sw = new StreamWriter(path);
+            for (int i = 0; i < stu.Count; ++i)
+            {
+                sw.Write(stu[i].id + " " + stu[i].name + " " + stu[i].bith + " " + stu[i].group);
+                sw.Write(" " + stu[i].stage + " " + stu[i].amark + " " + stu[i].univer + "\r\n");
+            }
+            sw.Close();
         }
 
         public void print()
@@ -120,6 +132,9 @@ namespace Special_2
             if (path.Length == 0) path = "DataBase.txt";
             db.loadDataFromFile(path);
             Console.WriteLine();
+            db.print();
+            db.saveDataToFile(path);
+            db.loadDataFromFile(path);
             db.print();
         }
     }

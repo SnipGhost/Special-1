@@ -198,7 +198,7 @@ namespace Special_2
         static void Main(string[] args)
         {
             DataBase db = null; // Собственно, экземпляр класса нашей БД
-            string path; // Вспомогательная переменная для ввода имен файлов
+            string path;        // Вспомогательная переменная для ввода имен файлов
 
             while (true)
             {

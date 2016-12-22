@@ -85,9 +85,9 @@ namespace Special_1
                     input = tr.ReadToEnd();
                     tr.Close();
                 }
-                catch (FileNotFoundException)
+                catch (Exception e)
                 {
-                    Console.WriteLine("Не удалось открыть файл \"" + path + "\"");
+                    Console.WriteLine("Не удалось открыть файл \"" + path + "\"\n\nПричина: " + e.ToString());
                     WaitAnyKey();
                     return null;
                     //Environment.Exit(0); // Если супер-критично

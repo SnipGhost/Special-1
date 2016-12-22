@@ -239,6 +239,24 @@ namespace Special_2
                 }
             }
 
+            public void sort(int field)
+            {
+                switch (field)
+                {
+                    case 2:
+                        Console.WriteLine("Не готово еще");
+                        break;
+
+                    case 3:
+                        Console.WriteLine("Не готово еще");
+                        break;
+
+                    default:
+                        Console.WriteLine("Для этого поля недоступна сортировка");
+                        break;
+                }
+            }
+
             /*
             public void findStudent(string s, )
             {
@@ -311,10 +329,10 @@ namespace Special_2
                         {
                             int id, field;
                             Console.Write("Введите ID: ");
-                            int.TryParse(Console.ReadLine(), out id);
+                            if (!int.TryParse(Console.ReadLine(), out id)) id = -1;
                             db.printFields();
                             Console.Write("Введите номер поля: ");
-                            int.TryParse(Console.ReadLine(), out field);
+                            if (!int.TryParse(Console.ReadLine(), out field)) field = -1;
                             Console.Write("Введите значение: ");
                             string input = Console.ReadLine();
                             db.changeField(id, field, input);
@@ -327,7 +345,7 @@ namespace Special_2
                         {
                             int id;
                             Console.Write("Введите ID: ");
-                            int.TryParse(Console.ReadLine(), out id);
+                            if (!int.TryParse(Console.ReadLine(), out id)) id = -1;
                             db.deleteStudent(id);
                         }
                         else Console.WriteLine("БД пуста!");
@@ -337,6 +355,10 @@ namespace Special_2
                         if (db != null)
                         {
                             db.printFields();
+                            int field;
+                            Console.Write("Введите номер поля: ");
+                            if (!int.TryParse(Console.ReadLine(), out field)) field = -1;
+                            db.sort(field);
                         }
                         else Console.WriteLine("БД пуста!");
                         break;
@@ -344,7 +366,7 @@ namespace Special_2
                     case 6: // Поиск элемента по значению и номеру поля
                         if (db != null)
                         {
-                            db.printFields();
+                            Console.WriteLine("Не готово еще");
                         }
                         else Console.WriteLine("БД пуста!");
                         break;
@@ -352,7 +374,7 @@ namespace Special_2
                     case 7: // Анализ средних баллов (???)
                         if (db != null) 
                         {
-                            db.printFields();
+                            Console.WriteLine("Не готово еще");
                         }
                         else Console.WriteLine("БД пуста!");
                         break;

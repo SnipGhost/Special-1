@@ -47,6 +47,13 @@ namespace Special_2
                 while (year.Length < 4) year = "0" + year;
                 return (day + mon + year);
             }
+            public void FromString(string input) // А это метод приведения ИЗ string В Date
+            {
+                string[] dt = input.Split(new char[] { '.' });
+                if (!int.TryParse(dt[0], out this.d)) this.d = 0;
+                if (!int.TryParse(dt[1], out this.m)) this.m = 0;
+                if (!int.TryParse(dt[2], out this.y)) this.y = 0;
+            }
         }
 
         class Student
@@ -64,10 +71,7 @@ namespace Special_2
                 // дабы не присваивать каждому полю потом значение, а просто ввести строку
                 int.TryParse(input[0], out this.id);
                 this.name = input[1] + " " + input[2] + " " + input[3];
-                string[] dt = input[4].Split(new char[] { '.' });
-                int.TryParse(dt[0], out this.bith.d);
-                int.TryParse(dt[1], out this.bith.m);
-                int.TryParse(dt[2], out this.bith.y);
+                this.bith.FromString(input[4]);
                 this.group = input[5];
                 this.stage = input[6];
                 float.TryParse(input[7], out this.amark);
@@ -157,9 +161,82 @@ namespace Special_2
                 }
             }
 
-            public void changeField(int id)
+            public void printFields()
             {
+                Console.WriteLine(" 1 - № записи-элемента (ID)");
+                Console.WriteLine(" 2 - ФИО студента");
+                Console.WriteLine(" 3 - Дата рождения");
+                Console.WriteLine(" 4 - Группа");
+                Console.WriteLine(" 5 - Курс");
+                Console.WriteLine(" 6 - Средний балл");
+                Console.WriteLine(" 7 - Институт/Университет");
+            }
 
+            public int FindId(int id)
+            {
+                int i;
+                for (i = 0; i < stu.Count; ++i)
+                    if (stu[i].id == id) break;
+                if (i == stu.Count) i = -1;
+                return i;
+            }
+
+            public void changeField(int id, int field, string input)
+            {
+                int i = FindId(id);
+                if (i == -1)
+                {
+                    Console.WriteLine("Нет такой записи");
+                    return;
+                }
+                switch (field)
+                {
+                    case 1:
+                        int nid = 0;
+                        if (!int.TryParse(input, out nid))
+                            Console.WriteLine("Неверный формат ID");
+                        bool jack = true;
+                        for (int j = 0; (j < stu.Count) && jack; ++j)
+                            if (stu[j].id == nid)
+                                jack = false;
+                        if (!jack) Console.WriteLine("Этот ID уже используется");
+                        else stu[i].id = nid;
+                        break;
+                    case 2:
+                        stu[i].name = input;
+                        break;
+                    case 3:
+                        stu[i].bith.FromString(input);
+                        break;
+                    case 4:
+                        stu[i].group = input;
+                        break;
+                    case 5:
+                        stu[i].stage = input;
+                        break;
+                    case 6:
+                        float.TryParse(input, out stu[i].amark);
+                        break;
+                    case 7:
+                        stu[i].univer = input;
+                        break;
+                    default:
+                        Console.WriteLine("Нет такого поля");
+                        break;
+                }
+            }
+
+            public void deleteStudent(int id)
+            {
+                int i = FindId(id);
+                if (i != -1)
+                {
+                    stu.RemoveAt(i);
+                }
+                else
+                {
+                    Console.WriteLine("Нет такой записи");
+                }
             }
 
             /*
@@ -232,7 +309,15 @@ namespace Special_2
                     case 3: // Изменить запись по ID
                         if (db != null)
                         {
-
+                            int id, field;
+                            Console.Write("Введите ID: ");
+                            int.TryParse(Console.ReadLine(), out id);
+                            db.printFields();
+                            Console.Write("Введите номер поля: ");
+                            int.TryParse(Console.ReadLine(), out field);
+                            Console.Write("Введите значение: ");
+                            string input = Console.ReadLine();
+                            db.changeField(id, field, input);
                         }
                         else Console.WriteLine("БД пуста!");
                         break;
@@ -240,7 +325,10 @@ namespace Special_2
                     case 4: // Удалить запись по ID
                         if (db != null)
                         {
-
+                            int id;
+                            Console.Write("Введите ID: ");
+                            int.TryParse(Console.ReadLine(), out id);
+                            db.deleteStudent(id);
                         }
                         else Console.WriteLine("БД пуста!");
                         break;
@@ -248,7 +336,7 @@ namespace Special_2
                     case 5: // Сортировка БД
                         if (db != null)
                         {
-
+                            db.printFields();
                         }
                         else Console.WriteLine("БД пуста!");
                         break;
@@ -256,7 +344,7 @@ namespace Special_2
                     case 6: // Поиск элемента по значению и номеру поля
                         if (db != null)
                         {
-
+                            db.printFields();
                         }
                         else Console.WriteLine("БД пуста!");
                         break;
@@ -264,7 +352,7 @@ namespace Special_2
                     case 7: // Анализ средних баллов (???)
                         if (db != null) 
                         {
-
+                            db.printFields();
                         }
                         else Console.WriteLine("БД пуста!");
                         break;

@@ -63,7 +63,7 @@ namespace Special_2
             public Date bith;      // Дата рождения 
             public string group;   // Группа
             public string stage;   // Курс
-            public float amark;   // Средний балл
+            public float amark;    // Средний балл
             public string univer;  // Институт/Университет
 
             public Student(string[] input) // Конструктор класса
@@ -239,16 +239,57 @@ namespace Special_2
                 }
             }
 
-            public void sort(int field)
+            public void sort(int field, bool type) // type = true - обратная сортировка 
             {
                 switch (field)
                 {
+                    case 1:
+                        for (int i = 0; i < stu.Count; ++i)
+                        {
+                            Student temp;
+                            for (int j = i + 1; j < stu.Count; ++j)
+                            {
+                                if ((type) ? stu[j].id > stu[i].id : stu[j].id < stu[i].id)
+                                {
+                                    temp = stu[i];
+                                    stu[i] = stu[j];
+                                    stu[j] = temp;
+                                }
+                            }
+                        }
+                        break;
+
                     case 2:
-                        Console.WriteLine("Не готово еще");
+                        for (int i = 0; i < stu.Count; ++i)
+                        {
+                            Student temp;
+                            for (int j = i + 1; j < stu.Count; ++j)
+                            {
+                                int cp = string.Compare(stu[j].name, stu[i].name);
+                                if ((type) ? cp > 0 : cp < 0)
+                                {
+                                    temp = stu[i];
+                                    stu[i] = stu[j];
+                                    stu[j] = temp;
+                                }
+                            }
+                        }
                         break;
 
                     case 3:
-                        Console.WriteLine("Не готово еще");
+                        for (int i = 0; i < stu.Count; ++i)
+                        {
+                            Student temp;
+                            for (int j = i + 1; j < stu.Count; ++j)
+                            {
+                                if ((type) ? stu[j].bith > stu[i].bith : stu[j].bith < stu[i].bith)
+                                {
+                                    temp = stu[i];
+                                    stu[i] = stu[j];
+                                    stu[j] = temp;
+                                }
+                            }
+                        }
                         break;
 
                     default:
@@ -358,7 +399,7 @@ namespace Special_2
                             int field;
                             Console.Write("Введите номер поля: ");
                             if (!int.TryParse(Console.ReadLine(), out field)) field = -1;
-                            db.sort(field);
+                            db.sort(field, false);
                         }
                         else Console.WriteLine("БД пуста!");
                         break;

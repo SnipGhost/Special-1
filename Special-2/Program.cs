@@ -90,6 +90,8 @@ namespace Special_2
         {
             public List<Student> stu;
 
+            public delegate int CMP(Student s1, Student s2);
+
             public void loadDataFromFile(string path) // Метод загрузки из файла
             {
                 try
@@ -239,62 +241,55 @@ namespace Special_2
                 }
             }
 
+            public int CmpId(Student s1, Student s2)   // Реализует сравнение по ID 
+            {
+                return (s1.id - s2.id);
+            }
+            public int CmpName(Student s1, Student s2) // Реализует сравнение по имени 
+            {
+                return string.Compare(s1.name, s2.name);
+            }
+            public int CmpDate(Student s1, Student s2) // Реализует сравнение по дате 
+            {
+                if (s1.bith > s2.bith) return 1;
+                else if (s1.bith < s2.bith) return -1;
+                else return 0;
+            }
+
             public void sort(int field, bool type) // type = true - обратная сортировка 
             {
+                CMP Comparate = null;
                 switch (field)
                 {
                     case 1:
-                        for (int i = 0; i < stu.Count; ++i)
-                        {
-                            Student temp;
-                            for (int j = i + 1; j < stu.Count; ++j)
-                            {
-                                if ((type) ? stu[j].id > stu[i].id : stu[j].id < stu[i].id)
-                                {
-                                    temp = stu[i];
-                                    stu[i] = stu[j];
-                                    stu[j] = temp;
-                                }
-                            }
-                        }
+                        Comparate = CmpId;
                         break;
 
                     case 2:
-                        for (int i = 0; i < stu.Count; ++i)
-                        {
-                            Student temp;
-                            for (int j = i + 1; j < stu.Count; ++j)
-                            {
-                                int cp = string.Compare(stu[j].name, stu[i].name);
-                                if ((type) ? cp > 0 : cp < 0)
-                                {
-                                    temp = stu[i];
-                                    stu[i] = stu[j];
-                                    stu[j] = temp;
-                                }
-                            }
-                        }
+                        Comparate = CmpName;
                         break;
 
                     case 3:
-                        for (int i = 0; i < stu.Count; ++i)
-                        {
-                            Student temp;
-                            for (int j = i + 1; j < stu.Count; ++j)
-                            {
-                                if ((type) ? stu[j].bith > stu[i].bith : stu[j].bith < stu[i].bith)
-                                {
-                                    temp = stu[i];
-                                    stu[i] = stu[j];
-                                    stu[j] = temp;
-                                }
-                            }
-                        }
+                        Comparate = CmpDate;
                         break;
 
                     default:
                         Console.WriteLine("Для этого поля недоступна сортировка");
-                        break;
+                        return;
+                }
+                for (int i = 0; i < stu.Count; ++i)
+                {
+                    Student temp;
+                    for (int j = i + 1; j < stu.Count; ++j)
+                    {
+                        int cp = Comparate(stu[j], stu[i]);
+                        if ((type) ? cp > 0 : cp < 0)
+                        {
+                            temp = stu[i];
+                            stu[i] = stu[j];
+                            stu[j] = temp;
+                        }
+                    }
                 }
             }
 

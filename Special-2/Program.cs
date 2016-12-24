@@ -293,11 +293,33 @@ namespace Special_2
                 }
             }
 
-            /*
-            public void findStudent(string s, )
+            public void findStudent(string s)
             {
             
-            }*/
+            }
+
+            public void AnalyzeMarks()
+            {
+                float s = stu[0].amark, max = s, min = s;
+                int max_i = 0, min_i = 0;
+                for (int i = 1; i < stu.Count; ++i)
+                {
+                    s += stu[i].amark;
+                    if (stu[i].amark > max)
+                    {
+                        max = stu[i].amark;
+                        max_i = i;
+                    }
+                    else if (stu[i].amark < min)
+                    {
+                        min = stu[i].amark;
+                        min_i = i;
+                    }
+                }
+                Console.WriteLine("Средний балл:      " + (s/stu.Count).ToString() + " для " + stu.Count + " студентов");
+                Console.WriteLine("Максимальный балл: " + max.ToString() + "\t [" + stu[max_i].name + "]");
+                Console.WriteLine("Минимальный балл:  " + min.ToString() + "\t [" + stu[min_i].name + "]");
+            }
         }
 
         static int Menu()
@@ -391,10 +413,12 @@ namespace Special_2
                         if (db != null)
                         {
                             db.printFields();
-                            int field;
+                            int field, type;
                             Console.Write("Введите номер поля: ");
                             if (!int.TryParse(Console.ReadLine(), out field)) field = -1;
-                            db.sort(field, false);
+                            Console.Write("Введите 1 для прямой сортировки и 0 для обратной: ");
+                            if (!int.TryParse(Console.ReadLine(), out type)) type = 0;
+                            db.sort(field, (type == 0));
                         }
                         else Console.WriteLine("БД пуста!");
                         break;
@@ -410,7 +434,7 @@ namespace Special_2
                     case 7: // Анализ средних баллов (???)
                         if (db != null) 
                         {
-                            Console.WriteLine("Не готово еще");
+                            db.AnalyzeMarks();
                         }
                         else Console.WriteLine("БД пуста!");
                         break;

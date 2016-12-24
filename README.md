@@ -19,6 +19,8 @@
 
 # Лабораторная работа №2 #
 
+![Screenshot](http://pp.vk.me/c837723/v837723039/172bc/V-IWaldURxc.jpg)
+
 ## Ключевые файлы ##
 
 Последняя версия кода [/Special-2/Program.cs](https://github.com/SnipGhost/Special-1/blob/master/Special-2/Program.cs)  

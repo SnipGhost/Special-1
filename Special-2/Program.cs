@@ -66,7 +66,7 @@ namespace Special_2
             public float amark;    // Средний балл
             public string univer;  // Институт/Университет
 
-            public Student(string[] input) // Конструктор класса
+            public Student(string[] input) // Конструктор класса 
             {
                 // дабы не присваивать каждому полю потом значение, а просто ввести строку
                 int.TryParse(input[0], out this.id);
@@ -84,6 +84,25 @@ namespace Special_2
                 }
                 Console.WriteLine("Студент №" + id + " [" + name + "]\t- создан успешно.");
             }
+
+            public void print() // Печатает данные о студенте на экран 
+            {
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write("{0, 2} ", this.id.ToString());
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write("{0, -26} ", this.name);
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write("{0, 10} ", this.bith + "");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("{0, -20} ", this.univer);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("{0, 6} ", this.group);
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.Write("({0, 1}) ", this.stage);
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("{0, 4}\n", this.amark.ToString());
+                Console.ForegroundColor = ConsoleColor.Gray;
+            }
         }
 
         class DataBase
@@ -92,7 +111,7 @@ namespace Special_2
 
             public delegate int CMP(Student s1, Student s2);
 
-            public void loadDataFromFile(string path) // Метод загрузки из файла
+            public void loadDataFromFile(string path) // Метод загрузки из файла 
             {
                 try
                 {
@@ -141,26 +160,30 @@ namespace Special_2
                 sw.Close();
             }
 
+            private void printHead() // Печатает заголовок таблицы 
+            {
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write("{0, 2} ", "##");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write("{0, -26} ", "Фамилия Имя Отчество");
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write("{0, 10} ", "dd.mm.yyyy");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("{0, -20} ", "Название ВУЗа");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("{0, 6} ", "Группа");
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.Write("({0, 1}) ", "K");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("{0, 4}\n", "Ср.");
+                Console.ForegroundColor = ConsoleColor.Gray;
+            }
+
             public void print() // Метод красивой печати
             {
-                for (int i = -1; i < stu.Count; ++i) // -1 - это вывод шапки таблицы
-                {
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                    Console.Write("{0, 2} ", (i == -1) ? "##" : stu[i].id.ToString());
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.Write("{0, -26} ", (i == -1) ? "Фамилия Имя Отчество" : stu[i].name);
-                    Console.ForegroundColor = ConsoleColor.Magenta;
-                    Console.Write("{0, 10} ", (i == -1) ? "dd.mm.yyyy" : stu[i].bith);
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write("{0, -20} ", (i == -1) ? "Название ВУЗа" : stu[i].univer);
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write("{0, 6} ", (i == -1) ? "Группа" : stu[i].group);
-                    Console.ForegroundColor = ConsoleColor.DarkCyan;
-                    Console.Write("({0, 1}) ", (i == -1) ? "K" : stu[i].stage);
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.Write("{0, 4}\n", (i == -1) ? "Ср." : stu[i].amark.ToString());
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                }
+                printHead();
+                for (int i = 0; i < stu.Count; ++i)
+                    stu[i].print();
             }
 
             public void printFields()
@@ -293,9 +316,39 @@ namespace Special_2
                 }
             }
 
-            public void findStudent(string s)
+            public void findStudent(int field, string s)
             {
-            
+                Console.WriteLine("Результаты поиска по полю #" + field + " со значением '" + s + "':\n");
+                switch (field)
+                {
+                    case 1:
+                        int id;
+                        if (!int.TryParse(s, out id)) id = -1;
+                        printHead();
+                        for (int i = 0; i < stu.Count; ++i)
+                            if (stu[i].id == id)
+                                stu[i].print();
+                        break;
+
+                    case 2:
+                        printHead();
+                        for (int i = 0; i < stu.Count; ++i)
+                            if (string.Compare(stu[i].name, s) == 0)
+                                stu[i].print();
+                        break;
+
+                    case 3:
+                        printHead();
+                        for (int i = 0; i < stu.Count; ++i)
+                            if (string.Compare(stu[i].bith + "", s) == 0)
+                                stu[i].print();
+                        break;
+
+                    default:
+                        Console.WriteLine("Для этого поля недоступен поиск");
+                        break;
+                }
+                Console.WriteLine("\nПоиск завершен");
             }
 
             public void AnalyzeMarks()
@@ -316,9 +369,9 @@ namespace Special_2
                         min_i = i;
                     }
                 }
-                Console.WriteLine("Средний балл:      " + (s/stu.Count).ToString() + " для " + stu.Count + " студентов");
-                Console.WriteLine("Максимальный балл: " + max.ToString() + "\t [" + stu[max_i].name + "]");
-                Console.WriteLine("Минимальный балл:  " + min.ToString() + "\t [" + stu[min_i].name + "]");
+                Console.WriteLine("Средний балл:      {0, 10} для {1, 2} студентов\n", (s / stu.Count), stu.Count);
+                Console.WriteLine("Максимальный балл: {0, 10} [{1, -26}]", max, stu[max_i].name);
+                Console.WriteLine("Минимальный балл:  {0, 10} [{1, -26}]", min, stu[min_i].name);
             }
         }
 
@@ -426,7 +479,13 @@ namespace Special_2
                     case 6: // Поиск элемента по значению и номеру поля
                         if (db != null)
                         {
-                            Console.WriteLine("Не готово еще");
+                            int field;
+                            db.printFields();
+                            Console.Write("Введите номер поля: ");
+                            if (!int.TryParse(Console.ReadLine(), out field)) field = -1;
+                            Console.Write("Введите значение: ");
+                            string s = Console.ReadLine();
+                            db.findStudent(field, s);
                         }
                         else Console.WriteLine("БД пуста!");
                         break;
